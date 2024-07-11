@@ -1,0 +1,50 @@
+1. Create Route : 
+            {
+            "uri": "/api/products",
+            "name": "product-route",
+            "methods": [
+                "GET"
+            ],
+            "plugins": {
+                "authz-keycloak": {
+                "client_id": "product-client",
+                "client_secret": "GMo4QQDLhjJleOSbJkTo7H99i2UzaMNv",
+                "discovery": "http://localhost:8080/realms/ProductRealm/.well-known/openid-configuration",
+                "introspection_endpoint": "http://localhost:8080/realms/ProductRealm/protocol/openid-connect/token/introspect",
+                "permissions": [
+                    "resource1#scope1"
+                ]
+                }
+            },
+            "upstream": {
+                "nodes": [
+                {
+                    "host": "productapi",
+                    "port": 80,
+                    "weight": 1
+                }
+                ],
+                "type": "roundrobin",
+                "hash_on": "vars",
+                "scheme": "http",
+                "pass_host": "pass"
+            },
+            "status": 1
+            }
+
+2.Create Consumer:
+        {
+        "username": "user1",
+        "plugins": {
+            "authz-keycloak": {
+            "client_id": "product-client",
+            "client_secret": "yBkd1w0rQuAuaF5JSOuByWZncTR10UTu",
+            "discovery": "http://localhost:8080/realms/ProductRealm/.well-known/openid-configuration",
+            "introspection_endpoint": "http://localhost:8080/realms/ProductRealm/protocol/openid-connect/token/introspect",
+            "permissions": [
+                "resource1#scope1"
+            ],
+            "public_key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlNODA3OjEzGzUQeBqFdV0iJgO1PMwBKj9GFCCwc6dGUl5CqSIcHr4ae57yS6HSJ7PxZPUZT31WabvrNFdxZcF/jkki2hSWdL7C6UdCVqiYCG2uB9OFf4FQQVxLsU4nsafGZrR2e7rhY3Z/vKgQyJ47TXoZ4xzkEF4v8kJA8Rp5BWVdnN4Nny+8KaR65/fEJfI6P719y0LcY5N0AFYrwRneHP7pviIImzMiDfv94CmctxKSYeQLPEXd6Bwd66dGq216D0rXxm1OV9OXE0a7nvY3At0DzUqBmUcgLenNDhCYBuDkvcgc2jyGcAhfJwibjmP04rLMlRHQYtjMUExcu4EQIDAQAB"
+            }
+        }
+        }

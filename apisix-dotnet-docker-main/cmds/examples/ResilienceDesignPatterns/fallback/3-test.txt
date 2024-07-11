@@ -1,0 +1,24 @@
+3. Creating a Fallback API
+
+Define the relevant endpoints in your primary and fallback APIs.
+
+[HttpGet("products")]
+public IActionResult GetProducts()
+{
+    throw new Exception(); // Primary API'de hata oluşturmak için
+    return Ok(_productsService.GetAll());
+}
+
+
+[HttpGet("fallback/products")]
+public IActionResult GetFallbackProducts()
+{
+    return Ok(new List<Product>() {
+        new Product() { Id = 1, Name = "Fallback Product 1", Price = 10 },
+        new Product() { Id = 2, Name = "Fallback Product 2", Price = 20 }
+    });
+}
+
+#request
+curl http://127.0.0.1:9080/api/products -i
+
